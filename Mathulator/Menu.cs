@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Figgle;
 
 // My using statements
 using Mathulator.Modules;
@@ -11,6 +12,9 @@ namespace Mathulator
 	// MAIN MENU
 	public class Menu
 	{
+		// USER ACCOUNTS
+		User user = new User();
+
 		// TOPBAR NAVIGATION BOILERPLATE
 		TopBarNavigation topbar = new TopBarNavigation();
 
@@ -21,9 +25,7 @@ namespace Mathulator
 		}
 
 		// USER INPUT FORMATTING
-		public string userInput(string message, int x, int y) {
-			Console.SetCursorPosition(x, y);
-		
+		public string userInput(string message){
 			Console.WriteLine(message);
 			Console.Write("User>");
 			string userInput = Console.ReadLine();
@@ -31,11 +33,111 @@ namespace Mathulator
 
 		}
 
+		//OPENING SCREEN
+		public void OpeningScreen() {
+			Console.WriteLine(
+			FiggleFonts.CyberMedium.Render("Welcome to"));
+			Console.WriteLine(
+			FiggleFonts.NancyJImproved.Render("Mathulator"));
+
+			Console.WriteLine("Select an option:");
+			Console.WriteLine("");
+			Console.WriteLine("1. Log In");
+			Console.WriteLine("2. Create New User");
+			Console.WriteLine("3. Exit Program");
+
+			bool whileMenuRunning = true;
+			while (whileMenuRunning == true)
+			{
+				string input = userInput("");
+				if (input == "1" || input == "2" || input == "3")
+				{
+					int caseSwitch = Int32.Parse(input);
+					switch (caseSwitch)
+					{
+						case 1:
+							Console.Clear();
+							Login();
+							break;
+						case 2:
+							Console.Clear();
+							CreateUser();
+							break;
+						case 3:
+							Environment.Exit(0);
+							CreateUser();
+							break;
+						default:
+							whileMenuRunning = false;
+							break;
+					}
+				}
+				else
+				{
+					Console.Clear();
+					OpeningScreen();
+				}
+			}
+		}
+
+		//CREATE USER
+		public void CreateUser()
+		{
+			Console.WriteLine("Enter a new username:");
+			string input = userInput("");
+
+			if (user.UserName.Contains(input))
+			{
+				Console.WriteLine("Username already taken");
+			}
+		}
+
+		//LOGIN USER
+		public void Login()
+		{
+			Console.WriteLine("Enter Username");
+
+			bool whileMenuRunning = true;
+			while (whileMenuRunning == true)
+			{
+				string input = userInput("");
+				if (input == "1" || input == "2" || input == "3")
+				{
+					int caseSwitch = Int32.Parse(input);
+					switch (caseSwitch)
+					{
+						case 1:
+							Console.Clear();
+							Login();
+							break;
+						case 2:
+							Console.Clear();
+							CreateUser();
+							break;
+						case 3:
+							Environment.Exit(0);
+							CreateUser();
+							break;
+						default:
+							whileMenuRunning = false;
+							break;
+					}
+				}
+				else
+				{
+					Console.Clear();
+					OpeningScreen();
+				}
+			}
+		}
+
 		// START MENU
 		public void StartMenu()
 		{
 			//TOPBAR NAVIGATION
 			navigationTitle("Main Menu");
+
+			
 
 			Console.WriteLine("");
 			Console.WriteLine("");
@@ -47,7 +149,7 @@ namespace Mathulator
 			bool whileMenuRunning = true;
 			while (whileMenuRunning == true)
 			{
-				string input = userInput("Enter number for menu item", 0, 8);
+				string input = userInput("Enter number for menu item");
 				if (input == "1" || input == "2")
 				{
 					int caseSwitch = Int32.Parse(input);

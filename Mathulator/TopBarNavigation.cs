@@ -9,6 +9,10 @@ namespace Mathulator
 		//TOPBAR NAVIGATION
 		public List<String> nav = new List<String>();
 
+		// Prints a topbar navigation menu that shows the user where in the
+		// program they currently care. Puts a ' > ' between menu items.
+		// Also puts an underline of dashed under the menu 
+		// Navigation items are stored in a list of strings
 		public void PrintNavigation()
 		{
 			int counter = nav.Count;
