@@ -2,7 +2,7 @@
 
 namespace Mathulator.Migrations
 {
-    public partial class hello : Migration
+    public partial class firstMigro : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,12 +10,13 @@ namespace Mathulator.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserPassword = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserName = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserName);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
         }
 

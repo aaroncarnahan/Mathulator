@@ -7,14 +7,7 @@ namespace Mathulator
 {
 	public class User
 	{
-		[Key]
+		public int UserId { get; set; }
 		public string UserName { get; set; }
-		public string UserPassword { get; set; }
-
-		public User()
-		{
-			this.UserName = "User";
-			this.UserPassword = "password";
-		}
 	}
 }
