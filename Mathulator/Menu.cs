@@ -5,7 +5,7 @@ using Figgle;
 
 // My using statements
 using Mathulator.Modules;
-
+using Mathulator.Services;
 
 namespace Mathulator
 {
@@ -13,7 +13,7 @@ namespace Mathulator
 	public class Menu
 	{
 		// USER ACCOUNTS
-		User user = new User();
+		UserService userService= new UserService();
 
 		// TOPBAR NAVIGATION BOILERPLATE
 		TopBarNavigation topbar = new TopBarNavigation();
@@ -61,7 +61,7 @@ namespace Mathulator
 							break;
 						case 2:
 							Console.Clear();
-							CreateUser();
+							userService.CreateUser();
 							break;
 						case 3:
 							Environment.Exit(0);
@@ -86,10 +86,7 @@ namespace Mathulator
 			Console.WriteLine("Enter a new username:");
 			string input = userInput("");
 
-			if (user.UserName.Contains(input))
-			{
-				Console.WriteLine("Username already taken");
-			}
+			
 		}
 
 		//LOGIN USER
