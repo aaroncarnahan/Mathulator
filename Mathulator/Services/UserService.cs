@@ -7,6 +7,7 @@ namespace Mathulator.Services
 {
     public class UserService
     {
+		
 
         // PASSWORD MASKING (NOT MY CODE)
         public static string PasswordMask()
@@ -46,10 +47,8 @@ namespace Mathulator.Services
         // CREATE
         public void CreateUser()
         {
-
             using (var db = new MathulatorDB())
             {
-
                 string EnterUsername()
                 {
                     Console.Clear();
@@ -70,21 +69,35 @@ namespace Mathulator.Services
 
                 string EnterPassword()
                 {
+                    string inputPassword;
+                    bool running = true;
+                    while (running)
+                    {
                         Console.WriteLine("Enter a password");
-                        string inputPassword = PasswordMask();     
+                        inputPassword = PasswordMask();
+                        Console.WriteLine(inputPassword);
+                        Console.ReadKey();
 
                         Console.WriteLine("Confirm password");
-                        string inputPasswordConfirm = PasswordMask();   
+                        string inputPasswordConfirm = PasswordMask();
+                        Console.WriteLine(inputPasswordConfirm);
+                        Console.ReadKey();
 
                         if (inputPassword != inputPasswordConfirm)
                         {
                             Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
                             Console.ReadLine();
-                            inputPassword = null;
-                            EnterPassword();
-                        }
+                            inputPassword = "badpass";
+						}
+						else
+						{
+                            running = false;
+						}
+
                         
-                        return inputPassword;
+                    }
+                    inputPassword = "fuck";
+                    return inputPassword;
                 }
 
                 string username = EnterUsername();
