@@ -7,6 +7,7 @@ namespace Mathulator.Services
 {
     public class UserService
     {
+        int currentUser;
         string inputUserName;
         string inputPassword;
         string inputPasswordConfirm;
@@ -112,6 +113,8 @@ namespace Mathulator.Services
 
         public void Login()
         {
+            
+
             using (var db = new MathulatorDB())
             {
                 bool running1 = true;
@@ -125,28 +128,17 @@ namespace Mathulator.Services
 					{
 						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
 						Console.WriteLine("Press ENTER to continue");
-                        Console.ReadKey();
-					}
+                        
+						Console.WriteLine(GetUserByUsername(inputUserName));
+                        Console.ReadLine();
+
+
+                    }
 					else
 					{
 						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " does not exist.");
                         Console.WriteLine("Press ENTER to continue");
                         Console.ReadKey();
-                    }
-
-					
-					if (db.Users.Any(e => e.UserName == inputUserName))
-					{
-						var query =
-							db
-								.Users
-								.Where(e => e.UserName == inputPassword);
-						Console.WriteLine(query);
-						Console.ReadKey();
-					}
-					else
-                    {
-                        running1 = false;
                     }
                 }
 
@@ -184,10 +176,23 @@ namespace Mathulator.Services
             }
         }
 
-    }
-
     
 
+    // GET USER DETAIL (BY USERNAME)
+    public int GetUserByUsername(string username)
+    {
+        using (var db = new MathulatorDB())
+        {
+            var entity =
+                db
+                    .Users
+                    .Single(e => e.UserName == username);
+                return entity.UserId;
+                
+        }
+    }
+
+    }
     // Read
     //public void ReadUser() {
     //    using (var db = new MathulatorDB())
