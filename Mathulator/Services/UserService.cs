@@ -112,8 +112,64 @@ namespace Mathulator.Services
 
         public void Login()
         {
-            Console.WriteLine("Login");
-            Console.ReadKey();
+            using (var db = new MathulatorDB())
+            {
+                bool running1 = true;
+                while (running1)
+                {
+
+                    Console.Clear();
+                    Console.WriteLine("Enter username:");
+                    inputUserName = Console.ReadLine();
+
+                    if (db.Users.Any(e => e.UserName == inputUserName))
+                    {
+                        Console.Clear();
+                        Console.WriteLine("User " + "\"" + inputUserName + "\"" + " already exists.");
+                        Console.WriteLine("Press ANY KEY to try again");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        running1 = false;
+                    }
+                }
+
+                bool running2 = true;
+                while (running2)
+                {
+                    Console.WriteLine("Enter password");
+                    inputPassword = PasswordMask();
+
+                    Console.WriteLine("Confirm password");
+                    inputPasswordConfirm = PasswordMask();
+
+                    if (inputPassword != inputPasswordConfirm)
+                    {
+                        Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        running2 = false;
+                    }
+                }
+
+                //var entity =
+                //    new User()
+                //    {
+                //        UserName = inputUserName,
+                //        UserPassword = inputPassword
+                //    };
+
+                //db.Users.Add(entity);
+                //db.SaveChanges();
+                //Console.Clear();
+                //Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been created.");
+                //Console.WriteLine("Press ENTER to Log In");
+                //Console.ReadKey();
+                //Login();
+            }
         }
 
     }
