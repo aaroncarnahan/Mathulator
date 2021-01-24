@@ -105,7 +105,7 @@ namespace Mathulator.Services
                 Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been created.");
                 Console.WriteLine("Press ENTER to Log In");
                 Console.ReadKey();
-                Login();
+                
             }
 
         }
@@ -117,19 +117,34 @@ namespace Mathulator.Services
                 bool running1 = true;
                 while (running1)
                 {
-
                     Console.Clear();
                     Console.WriteLine("Enter username:");
                     inputUserName = Console.ReadLine();
 
                     if (db.Users.Any(e => e.UserName == inputUserName))
-                    {
-                        Console.Clear();
-                        Console.WriteLine("User " + "\"" + inputUserName + "\"" + " already exists.");
-                        Console.WriteLine("Press ANY KEY to try again");
+					{
+						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
+						Console.WriteLine("Press ENTER to continue");
+                        Console.ReadKey();
+					}
+					else
+					{
+						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " does not exist.");
+                        Console.WriteLine("Press ENTER to continue");
                         Console.ReadKey();
                     }
-                    else
+
+					
+					if (db.Users.Any(e => e.UserName == inputUserName))
+					{
+						var query =
+							db
+								.Users
+								.Where(e => e.UserName == inputPassword);
+						Console.WriteLine(query);
+						Console.ReadKey();
+					}
+					else
                     {
                         running1 = false;
                     }
@@ -140,9 +155,6 @@ namespace Mathulator.Services
                 {
                     Console.WriteLine("Enter password");
                     inputPassword = PasswordMask();
-
-                    Console.WriteLine("Confirm password");
-                    inputPasswordConfirm = PasswordMask();
 
                     if (inputPassword != inputPasswordConfirm)
                     {

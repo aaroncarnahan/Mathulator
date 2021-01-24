@@ -57,7 +57,7 @@ namespace Mathulator
 					{
 						case 1:
 							Console.Clear();
-							Login();
+							userService.Login();
 							break;
 						case 2:
 							Console.Clear();
@@ -65,55 +65,6 @@ namespace Mathulator
 							break;
 						case 3:
 							Environment.Exit(0);
-							CreateUser();
-							break;
-						default:
-							whileMenuRunning = false;
-							break;
-					}
-				}
-				else
-				{
-					Console.Clear();
-					OpeningScreen();
-				}
-			}
-		}
-
-		//CREATE USER
-		public void CreateUser()
-		{
-			Console.WriteLine("Enter a new username:");
-			string input = userInput("");
-
-			
-		}
-
-		//LOGIN USER
-		public void Login()
-		{
-			Console.WriteLine("Enter Username");
-
-			bool whileMenuRunning = true;
-			while (whileMenuRunning == true)
-			{
-				string input = userInput("");
-				if (input == "1" || input == "2" || input == "3")
-				{
-					int caseSwitch = Int32.Parse(input);
-					switch (caseSwitch)
-					{
-						case 1:
-							Console.Clear();
-							Login();
-							break;
-						case 2:
-							Console.Clear();
-							CreateUser();
-							break;
-						case 3:
-							Environment.Exit(0);
-							CreateUser();
 							break;
 						default:
 							whileMenuRunning = false;
