@@ -7,7 +7,9 @@ namespace Mathulator.Services
 {
     public class UserService
     {
-		
+        string inputUserName;
+        string inputPassword;
+        string inputPasswordConfirm;
 
         // PASSWORD MASKING (NOT MY CODE)
         public static string PasswordMask()
@@ -49,11 +51,13 @@ namespace Mathulator.Services
         {
             using (var db = new MathulatorDB())
             {
-                string EnterUsername()
+                bool running1 = true;
+                while (running1)
                 {
+
                     Console.Clear();
                     Console.WriteLine("Enter a new username:");
-                    string inputUserName = Console.ReadLine();
+                    inputUserName = Console.ReadLine();
 
                     if (db.Users.Any(e => e.UserName == inputUserName))
                     {
@@ -61,103 +65,97 @@ namespace Mathulator.Services
                         Console.WriteLine("User " + "\"" + inputUserName + "\"" + " already exists.");
                         Console.WriteLine("Press ANY KEY to try again");
                         Console.ReadKey();
-                        EnterUsername();
                     }
-
-                    return inputUserName;
-                }
-
-                string EnterPassword()
-                {
-                    string inputPassword;
-                    bool running = true;
-                    while (running)
+                    else
                     {
-                        Console.WriteLine("Enter a password");
-                        inputPassword = PasswordMask();
-                        Console.WriteLine(inputPassword);
-                        Console.ReadKey();
-
-                        Console.WriteLine("Confirm password");
-                        string inputPasswordConfirm = PasswordMask();
-                        Console.WriteLine(inputPasswordConfirm);
-                        Console.ReadKey();
-
-                        if (inputPassword != inputPasswordConfirm)
-                        {
-                            Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
-                            Console.ReadLine();
-                            inputPassword = "badpass";
-						}
-						else
-						{
-                            running = false;
-						}
-
-                        
+                        running1 = false;
                     }
-                    inputPassword = "fuck";
-                    return inputPassword;
                 }
 
-                string username = EnterUsername();
-                string password = EnterPassword();
+                bool running2 = true;
+                while (running2)
+                {
+                    Console.WriteLine("Enter a password");
+                    inputPassword = PasswordMask();
+                    
+                    Console.WriteLine("Confirm password");
+                    inputPasswordConfirm = PasswordMask();
+                   
+                    if (inputPassword != inputPasswordConfirm)
+                    {
+                        Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        running2 = false;
+                    }
+                }
 
-				var entity =
-					new User()
-					{
-						UserName = username,
-						UserPassword = password
-					};
+                var entity =
+                    new User()
+                    {
+                        UserName = inputUserName,
+                        UserPassword = inputPassword
+                    };
 
-				db.Users.Add(entity);
-				db.SaveChanges();
-				Console.Clear();
-				Console.WriteLine("User " + "\"" + username + "\"" + " has been created.");
-				Console.WriteLine("Press ANY KEY to continue");
-				Console.ReadKey();
-			
-			}
-		}
+                db.Users.Add(entity);
+                db.SaveChanges();
+                Console.Clear();
+                Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been created.");
+                Console.WriteLine("Press ENTER to Log In");
+                Console.ReadKey();
+                Login();
+            }
 
-        // Read
-        //public void ReadUser() {
-        //    using (var db = new MathulatorDB())
-        //    {
-        //        var user = db.Users
-        //        .OrderBy(b => b.UserId)
-        //        .First();
-        //        }
-        //    }
+        }
 
-        //public void UpdateUser()
-        //{
-        //    using (var db = new MathulatorDB())
-        //    {
-        //        var user = db.Users;
-        //        Console.WriteLine("Updating the blog and adding a post");
-        //        user.UserName = "https://devblogs.microsoft.com/dotnet";
-        //        user.Posts.Add(
-        //            new Post
-        //            {
-        //                Title = "Hello World",
-        //                Content = "I wrote an app using EF Core!"
-        //            });
-        //        db.SaveChanges();
-        //    }
-        //}
-        //public void DeleteUser() 
-        //{
-        //    using (var db = new MathulatorDB())
-        //    {
-        //        Console.WriteLine("Delete a user");
-        //        db.Remove(user);
-        //        db.SaveChanges();
-        //    }
-        //}
-
-
-
+        public void Login()
+        {
+            Console.WriteLine("Login");
+            Console.ReadKey();
+        }
 
     }
+
+    
+
+    // Read
+    //public void ReadUser() {
+    //    using (var db = new MathulatorDB())
+    //    {
+    //        var user = db.Users
+    //        .OrderBy(b => b.UserId)
+    //        .First();
+    //        }
+    //    }
+
+    //public void UpdateUser()
+    //{
+    //    using (var db = new MathulatorDB())
+    //    {
+    //        var user = db.Users;
+    //        Console.WriteLine("Updating the blog and adding a post");
+    //        user.UserName = "https://devblogs.microsoft.com/dotnet";
+    //        user.Posts.Add(
+    //            new Post
+    //            {
+    //                Title = "Hello World",
+    //                Content = "I wrote an app using EF Core!"
+    //            });
+    //        db.SaveChanges();
+    //    }
+    //}
+    //public void DeleteUser() 
+    //{
+    //    using (var db = new MathulatorDB())
+    //    {
+    //        Console.WriteLine("Delete a user");
+    //        db.Remove(user);
+    //        db.SaveChanges();
+    //    }
+    //}
+
+
 }
+
