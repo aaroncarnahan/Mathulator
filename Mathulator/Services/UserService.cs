@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace Mathulator.Services
 {
     public class UserService
     {
+
+        int tempUserId;
         int currentUser;
         string inputUserName;
         string inputPassword;
@@ -57,7 +60,12 @@ namespace Mathulator.Services
                 {
 
                     Console.Clear();
-                    Console.WriteLine("Enter a new username:");
+					Console.WriteLine("CREATE NEW USER");
+					Console.WriteLine("---------------");
+					Console.WriteLine();
+					Console.WriteLine("WARNING: Write down your username and password. There is no way to recover them if you forget.");
+					Console.WriteLine();
+                    Console.WriteLine("Type a new username then press ENTER");
                     inputUserName = Console.ReadLine();
 
                     if (db.Users.Any(e => e.UserName == inputUserName))
@@ -76,10 +84,10 @@ namespace Mathulator.Services
                 bool running2 = true;
                 while (running2)
                 {
-                    Console.WriteLine("Enter a password");
+                    Console.WriteLine("Type in your new password and then press ENTER");
                     inputPassword = PasswordMask();
                     
-                    Console.WriteLine("Confirm password");
+                    Console.WriteLine("Type in your passowrd again to cofrim and then press ENTER");
                     inputPasswordConfirm = PasswordMask();
                    
                     if (inputPassword != inputPasswordConfirm)
@@ -113,26 +121,27 @@ namespace Mathulator.Services
 
         public void Login()
         {
-            
-
             using (var db = new MathulatorDB())
             {
                 bool running1 = true;
                 while (running1)
                 {
                     Console.Clear();
-                    Console.WriteLine("Enter username:");
+                    Console.WriteLine("LOGIN");
+                    Console.WriteLine("-----");
+					Console.WriteLine();
+                    Console.WriteLine("Enter username or 'back' to return to the main menu");
                     inputUserName = Console.ReadLine();
 
+					if (inputUserName == "back")
+					{
+                        //Menu.OpeningScreen();
+					}
                     if (db.Users.Any(e => e.UserName == inputUserName))
 					{
-						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
-						Console.WriteLine("Press ENTER to continue");
-                        
-						Console.WriteLine(GetUserByUsername(inputUserName));
-                        Console.ReadLine();
-
-
+                        Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
+						tempUserId = GetUserIdByUsername(inputUserName);
+                        running1 = false;
                     }
 					else
 					{
@@ -145,17 +154,20 @@ namespace Mathulator.Services
                 bool running2 = true;
                 while (running2)
                 {
+                    string passwordCheck = GetUserPasswordById(tempUserId);
+
                     Console.WriteLine("Enter password");
                     inputPassword = PasswordMask();
 
-                    if (inputPassword != inputPasswordConfirm)
+                    if (inputPassword != passwordCheck)
                     {
-                        Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
+                        Console.WriteLine("Passwords do not match. Press ENTER to try again");
                         Console.ReadLine();
                     }
                     else
                     {
-                        running2 = false;
+						Console.WriteLine("Passwords match!");
+                        Console.ReadKey();
                     }
                 }
 
@@ -179,7 +191,7 @@ namespace Mathulator.Services
     
 
     // GET USER DETAIL (BY USERNAME)
-    public int GetUserByUsername(string username)
+    public int GetUserIdByUsername(string username)
     {
         using (var db = new MathulatorDB())
         {
@@ -188,7 +200,19 @@ namespace Mathulator.Services
                     .Users
                     .Single(e => e.UserName == username);
                 return entity.UserId;
-                
+        }
+    }
+
+    // GET USER DETAIL (BY USERNAME)
+    public string GetUserPasswordById(int id)
+    {
+        using (var db = new MathulatorDB())
+        {
+            var entity =
+                db
+                    .Users
+                    .Single(e => e.UserId == id);
+                return entity.UserPassword;
         }
     }
 
