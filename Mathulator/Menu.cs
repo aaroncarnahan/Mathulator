@@ -11,6 +11,12 @@ namespace Mathulator
 {
 	public class Menu
 	{
+		int currentUserId;
+		int tempUserId;
+		string inputUserName;
+		string inputPassword;
+		string inputPasswordConfirm;
+
 		// USER ACCOUNTS
 		UserService userService= new UserService();
 
@@ -29,7 +35,41 @@ namespace Mathulator
 			Console.Write("User>");
 			string userInput = Console.ReadLine();
 			return userInput;
+		}
 
+		// PASSWORD MASKING (NOT MY CODE)
+		public static string PasswordMask()
+		{
+			string password = "";
+			ConsoleKeyInfo info = Console.ReadKey(true);
+			while (info.Key != ConsoleKey.Enter)
+			{
+				if (info.Key != ConsoleKey.Backspace)
+				{
+					Console.Write("*");
+					password += info.KeyChar;
+				}
+				else if (info.Key == ConsoleKey.Backspace)
+				{
+					if (!string.IsNullOrEmpty(password))
+					{
+						// remove one character from the list of password characters
+						password = password.Substring(0, password.Length - 1);
+						// get the location of the cursor
+						int pos = Console.CursorLeft;
+						// move the cursor to the left by one character
+						Console.SetCursorPosition(pos - 1, Console.CursorTop);
+						// replace it with space
+						Console.Write(" ");
+						// move the cursor to the left by one character again
+						Console.SetCursorPosition(pos - 1, Console.CursorTop);
+					}
+				}
+				info = Console.ReadKey(true);
+			}
+			// add a new line because user pressed enter at the end of their password
+			Console.WriteLine();
+			return password;
 		}
 
 		//OPENING SCREEN
@@ -56,11 +96,11 @@ namespace Mathulator
 					{
 						case 1:
 							Console.Clear();
-							userService.Login();
+							Login();
 							break;
 						case 2:
 							Console.Clear();
-							userService.CreateUser();
+							CreateUser();
 							break;
 						case 3:
 							Environment.Exit(0);
@@ -83,8 +123,6 @@ namespace Mathulator
 		{
 			//TOPBAR NAVIGATION
 			navigationTitle("Main Menu");
-
-			
 
 			Console.WriteLine("");
 			Console.WriteLine("");
@@ -123,6 +161,118 @@ namespace Mathulator
 
 			Console.WriteLine("out of the loop");
 			Console.ReadKey();
+		}
+
+
+		public void Login()
+		{
+			using (var db = new MathulatorDB())
+			{
+				bool running1 = true;
+				while (running1)
+				{
+					Console.Clear();
+					Console.WriteLine("LOGIN");
+					Console.WriteLine("-----");
+					Console.WriteLine();
+					Console.WriteLine("Enter username:");
+					inputUserName = Console.ReadLine();
+
+					if (userService.CheckIfUserExists(inputUserName))
+					{
+						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
+						tempUserId = userService.GetUserIdByUsername(inputUserName);
+						running1 = false;
+					}
+					else
+					{
+						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " does not exist.");
+						Console.WriteLine("Press ENTER to continue");
+						Console.ReadKey();
+					}
+				}
+
+				bool running2 = true;
+				while (running2)
+				{
+					string passwordCheck = userService.GetUserPasswordById(tempUserId);
+
+					Console.WriteLine("Enter password");
+					inputPassword = PasswordMask();
+
+					if (inputPassword != passwordCheck)
+					{
+						Console.WriteLine("Passwords do not match. Press ENTER to try again");
+						Console.ReadLine();
+					}
+					else
+					{
+						currentUserId = userService.GetUserIdByUsername(inputUserName);
+						Console.WriteLine(currentUserId);
+						running2 = false;
+					}
+				}
+			}
+		}
+
+		// CREATE
+		public void CreateUser()
+		{
+			using (var db = new MathulatorDB())
+			{
+				bool running1 = true;
+				while (running1)
+				{
+
+					Console.Clear();
+					Console.WriteLine("CREATE NEW USER");
+					Console.WriteLine("---------------");
+					Console.WriteLine();
+					Console.WriteLine("WARNING: Write down your username and password. There is no way to recover them if you forget.");
+					Console.WriteLine();
+					Console.WriteLine("Type a new username then press ENTER");
+					inputUserName = Console.ReadLine();
+
+					if (userService.CheckIfUserExists(inputUserName))
+					{
+						Console.Clear();
+						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " already exists.");
+						Console.WriteLine("Press ANY KEY to try again");
+						Console.ReadKey();
+					}
+					else
+					{
+						running1 = false;
+					}
+				}
+
+				bool running2 = true;
+				while (running2)
+				{
+					Console.WriteLine("Type in your new password and then press ENTER");
+					inputPassword = PasswordMask();
+
+					Console.WriteLine("Type in your passowrd again to cofrim and then press ENTER");
+					inputPasswordConfirm = PasswordMask();
+
+					if (inputPassword != inputPasswordConfirm)
+					{
+						Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
+						Console.ReadLine();
+					}
+					else
+					{
+						running2 = false;
+					}
+				}
+
+				userService.CreateUser(inputUserName, inputPassword);
+				Console.Clear();
+				Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been created.");
+				Console.WriteLine("Press ENTER to Log In");
+				Console.ReadKey();
+
+			}
 		}
 
 		// MAIN MENU > MULTIPLICATION
@@ -174,8 +324,6 @@ namespace Mathulator
 		// MAIN MENU > MULTIPLICATION > MULTIPLICATION TABLE
 		public void MultiplicationTableMainMenu()
 		{
-
-			//TOPBAR NAVIGATION
 			//TOPBAR NAVIGATION
 			String navigationTitle = "Multiplication Table";
 			topbar.CheckNavigation(navigationTitle);
