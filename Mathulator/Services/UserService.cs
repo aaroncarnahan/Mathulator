@@ -8,9 +8,8 @@ namespace Mathulator.Services
 {
     public class UserService
     {
-
+        int currentUserId;
         int tempUserId;
-        int currentUser;
         string inputUserName;
         string inputPassword;
         string inputPasswordConfirm;
@@ -130,13 +129,9 @@ namespace Mathulator.Services
                     Console.WriteLine("LOGIN");
                     Console.WriteLine("-----");
 					Console.WriteLine();
-                    Console.WriteLine("Enter username or 'back' to return to the main menu");
+                    Console.WriteLine("Enter username:");
                     inputUserName = Console.ReadLine();
 
-					if (inputUserName == "back")
-					{
-                        //Menu.OpeningScreen();
-					}
                     if (db.Users.Any(e => e.UserName == inputUserName))
 					{
                         Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
@@ -166,10 +161,12 @@ namespace Mathulator.Services
                     }
                     else
                     {
-						Console.WriteLine("Passwords match!");
-                        Console.ReadKey();
+                        currentUserId = GetUserIdByUsername(inputUserName);
+                        Console.WriteLine(currentUserId);
+                        running2 = false;
                     }
                 }
+
 
                 //var entity =
                 //    new User()
@@ -203,7 +200,7 @@ namespace Mathulator.Services
         }
     }
 
-    // GET USER DETAIL (BY USERNAME)
+    // GET USER PASSWORD (BY ID)
     public string GetUserPasswordById(int id)
     {
         using (var db = new MathulatorDB())

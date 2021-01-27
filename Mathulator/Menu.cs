@@ -9,7 +9,6 @@ using Mathulator.Services;
 
 namespace Mathulator
 {
-	// MAIN MENU
 	public class Menu
 	{
 		// USER ACCOUNTS
