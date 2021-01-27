@@ -85,6 +85,9 @@ namespace Mathulator
 			Console.WriteLine("2. Create New User");
 			Console.WriteLine("3. Exit Program");
 
+			Console.WriteLine("currentuser");
+			Console.WriteLine(currentUserId);
+
 			bool whileMenuRunning = true;
 			while (whileMenuRunning == true)
 			{
@@ -212,6 +215,9 @@ namespace Mathulator
 						running2 = false;
 					}
 				}
+
+				Console.Clear();
+				StartMenu();
 			}
 		}
 
