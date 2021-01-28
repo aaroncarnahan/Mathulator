@@ -31,8 +31,20 @@ namespace Mathulator
 
 		// USER INPUT FORMATTING
 		public string userInput(string message){
+
+			string userTag;
+
+			if (currentUserId == 0)
+			{
+				userTag = "User>";
+			}
+			else
+			{
+				userTag = userService.GetUserNameById(currentUserId) + ">";
+			}
+
 			Console.WriteLine(message);
-			Console.Write("User>");
+			Console.Write(userTag);
 			string userInput = Console.ReadLine();
 			return userInput;
 		}
@@ -85,9 +97,6 @@ namespace Mathulator
 			Console.WriteLine("2. Create New User");
 			Console.WriteLine("3. Exit Program");
 
-			Console.WriteLine("currentuser");
-			Console.WriteLine(currentUserId);
-
 			bool whileMenuRunning = true;
 			while (whileMenuRunning == true)
 			{
@@ -137,7 +146,7 @@ namespace Mathulator
 			bool whileMenuRunning = true;
 			while (whileMenuRunning == true)
 			{
-				string input = userInput("Enter number for menu item");
+				string input = userInput("");
 				if (input == "1" || input == "2")
 				{
 					int caseSwitch = Int32.Parse(input);
@@ -161,9 +170,6 @@ namespace Mathulator
 					StartMenu();
 				}
 			}
-
-			Console.WriteLine("out of the loop");
-			Console.ReadKey();
 		}
 
 

@@ -71,6 +71,19 @@ namespace Mathulator.Services
         }
     }
 
+        // GET USER NAME (BY ID)
+        public string GetUserNameById(int id)
+        {
+            using (var db = new MathulatorDB())
+            {
+                var entity =
+                    db
+                        .Users
+                        .Single(e => e.UserId == id);
+                return entity.UserName;
+            }
+        }
+
     }
     // Read
     //public void ReadUser() {
