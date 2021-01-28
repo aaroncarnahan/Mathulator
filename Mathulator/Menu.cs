@@ -84,6 +84,15 @@ namespace Mathulator
 			return password;
 		}
 
+		// CREATE NEW USER TEXT BANNER
+		public void CreateNewUserBanner() 
+		{
+			Console.Clear();
+			Console.WriteLine("CREATE NEW USER");
+			Console.WriteLine("---------------");
+			Console.WriteLine();
+		}
+
 		//OPENING SCREEN
 		public void OpeningScreen() {
 			Console.WriteLine(
@@ -185,19 +194,23 @@ namespace Mathulator
 					Console.WriteLine("-----");
 					Console.WriteLine();
 					Console.WriteLine("Enter username:");
-					inputUserName = Console.ReadLine();
+					inputUserName = userInput("");
 
 					if (userService.CheckIfUserExists(inputUserName))
 					{
-						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
 						tempUserId = userService.GetUserIdByUsername(inputUserName);
 						running1 = false;
 					}
 					else
 					{
+						Console.Clear();
+						Console.WriteLine("LOGIN");
+						Console.WriteLine("-----");
+						Console.WriteLine();
 						Console.WriteLine("User " + "\"" + inputUserName + "\"" + " does not exist.");
 						Console.WriteLine("Press ENTER to continue");
 						Console.ReadKey();
+						
 					}
 				}
 
@@ -206,13 +219,27 @@ namespace Mathulator
 				{
 					string passwordCheck = userService.GetUserPasswordById(tempUserId);
 
-					Console.WriteLine("Enter password");
+					Console.Clear();
+					Console.WriteLine("LOGIN");
+					Console.WriteLine("-----");
+					Console.WriteLine();
+					Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been found.");
+					Console.WriteLine();
+					Console.WriteLine("Enter password:");
+					Console.WriteLine();
+					Console.Write("User>");
 					inputPassword = PasswordMask();
 
 					if (inputPassword != passwordCheck)
 					{
-						Console.WriteLine("Passwords do not match. Press ENTER to try again");
+						Console.Clear();
+						Console.WriteLine("LOGIN");
+						Console.WriteLine("-----");
+						Console.WriteLine();
+						Console.WriteLine("Incorrect password.");
+						Console.WriteLine("Press ENTER to try again");
 						Console.ReadLine();
+						Console.Clear();
 					}
 					else
 					{
@@ -227,7 +254,7 @@ namespace Mathulator
 			}
 		}
 
-		// CREATE
+		// CREATE USER
 		public void CreateUser()
 		{
 			using (var db = new MathulatorDB())
@@ -236,14 +263,11 @@ namespace Mathulator
 				while (running1)
 				{
 
-					Console.Clear();
-					Console.WriteLine("CREATE NEW USER");
-					Console.WriteLine("---------------");
-					Console.WriteLine();
+					CreateNewUserBanner();
 					Console.WriteLine("WARNING: Write down your username and password. There is no way to recover them if you forget.");
 					Console.WriteLine();
 					Console.WriteLine("Type a new username then press ENTER");
-					inputUserName = Console.ReadLine();
+					inputUserName = userInput("");
 
 					if (userService.CheckIfUserExists(inputUserName))
 					{
@@ -252,6 +276,15 @@ namespace Mathulator
 						Console.WriteLine("Press ANY KEY to try again");
 						Console.ReadKey();
 					}
+
+					else if (inputUserName == "")
+					{
+						CreateNewUserBanner();
+						Console.WriteLine("Username is blank. Must enter at least 1 character");
+						Console.WriteLine("Press ENTER to try again");
+						Console.ReadKey();
+					}
+					
 					else
 					{
 						running1 = false;
@@ -261,12 +294,37 @@ namespace Mathulator
 				bool running2 = true;
 				while (running2)
 				{
-					Console.WriteLine("Type in your new password and then press ENTER");
-					inputPassword = PasswordMask();
 
+					bool running3 = true;
+					while (running3)
+					{
+
+							CreateNewUserBanner();
+							Console.WriteLine("Type your new password:");
+							Console.WriteLine();
+							Console.Write("User>");
+							inputPassword = PasswordMask();
+
+						if (inputPassword == "")
+						{
+							CreateNewUserBanner();
+							Console.WriteLine("Password must be at least 1 character long");
+							Console.WriteLine("Press ENTER to try again");
+							Console.ReadKey();
+						}
+						else
+						{
+							running3 = false;
+						}
+					}
+
+					CreateNewUserBanner();
 					Console.WriteLine("Type in your passowrd again to cofrim and then press ENTER");
+					Console.WriteLine();
+					Console.Write("User>");
 					inputPasswordConfirm = PasswordMask();
 
+					
 					if (inputPassword != inputPasswordConfirm)
 					{
 						Console.WriteLine("Passwords do not match. Press ANY KEY to try again");
@@ -279,10 +337,11 @@ namespace Mathulator
 				}
 
 				userService.CreateUser(inputUserName, inputPassword);
-				Console.Clear();
+				CreateNewUserBanner();
 				Console.WriteLine("User " + "\"" + inputUserName + "\"" + " has been created.");
 				Console.WriteLine("Press ENTER to Log In");
 				Console.ReadKey();
+				Login();
 
 			}
 		}
